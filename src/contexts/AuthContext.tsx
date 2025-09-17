@@ -62,30 +62,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          full_name: fullName,
+          role: role,
+        }
+      }
     })
 
     if (error) {
       toast.error(error.message)
       throw error
-    }
-
-    if (data.user) {
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert([
-          {
-            id: data.user.id,
-            email,
-            full_name: fullName,
-            role,
-          },
-        ])
-
-      if (profileError) {
-        toast.error('Error creating profile')
-        throw profileError
-      }
     }
 
     toast.success('Account created successfully!')
