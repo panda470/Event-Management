@@ -75,7 +75,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw error
     }
 
-    toast.success('Account created successfully!')
+    // Check if email confirmation is required
+    if (data.user && !data.session) {
+      toast.success('Account created! Please check your email to confirm your account before signing in.')
+    } else {
+      toast.success('Account created successfully!')
+    }
   }
 
   const signInWithGoogle = async () => {
